@@ -6,9 +6,7 @@ namespace api_rest_dynamic.Singleton.Context
 {
     public class ContexPostgres
     {
-        private static string _connectionString = null;
-
-        private ContexPostgres() { }
+        private static string _connectionString = null;        
 
         public static string GetContextString()
         {
