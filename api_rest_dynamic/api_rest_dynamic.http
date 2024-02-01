@@ -1,0 +1,6 @@
+@api_rest_dynamic_HostAddress = http://localhost:5037
+
+GET {{api_rest_dynamic_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
