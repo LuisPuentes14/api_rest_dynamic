@@ -13,7 +13,7 @@ namespace api_rest_dynamic.Repository
 {
     public class RepositoryRequests : IRepositoryRequests
     {
-        public Dictionary<string, dynamic> GetResponse(ObjectsReques obj, Dictionary<string, object> inputParameters)
+        public async Task<Dictionary<string, dynamic>> GetResponse(ObjectsReques obj, Dictionary<string, object> inputParameters)
         {
             using (var connection = new NpgsqlConnection(ContexPostgres.GetContextString()))
             {
@@ -55,16 +55,25 @@ namespace api_rest_dynamic.Repository
                     }
 
                     // ejecuta
-                    command.ExecuteNonQuery();
+                   await command.ExecuteNonQueryAsync();
 
                     Dictionary<string, object> requestResult = new();
 
                     // agrega al diccionario el resultado
                     foreach (var parameter in listOutParameters)
-                    {
+                    {                    
+                        //parsea el tipo de datos de postgres a al lenguaje de CSharp
+                        Enum.TryParse(
+                            // obtiene el tipo de dato al lenguage 
+                           Utils.Utils.GetNpgsqlTypeToCSharpType( parameter.Trim().Split(" ")[2]), 
+                            true, out DbType npgsqlDbTypeValue);
+
+                        //obtiene el tipo ya convertidos
+                        var value = Utils.Utils.ConvertElementInDbType(command.Parameters[parameter.Trim().Split(" ")[1]].Value,npgsqlDbTypeValue);                        
+                       
+                        // loa agrega a la lista
                         requestResult.Add(
-                            parameter.Trim().Split(" ")[1],
-                            command.Parameters[parameter.Trim().Split(" ")[1]].Value);
+                            parameter.Trim().Split(" ")[1], value);
                     }
 
                     // retorna el diccionario

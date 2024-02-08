@@ -10,7 +10,7 @@ namespace api_rest_dynamic.Services
     public class ServiceRequests(IRepositoryRequests repositoryRequests) : IServiceRequests
     {
         private readonly IRepositoryRequests _repositoryRequests = repositoryRequests;
-        public Dictionary<string, dynamic> GetResponse(string nameObject, Dictionary<string, dynamic> parameters)
+        public async Task<Dictionary<string, object>> GetResponse(string nameObject, Dictionary<string, object> parameters)
         {
 
             ObjectsReques? objectsReques = LoadObjectsDataBase.objectsReques
@@ -21,7 +21,7 @@ namespace api_rest_dynamic.Services
 
                 throw new NotFoundException ($"Objeto '{nameObject}' no encontrado");
 
-           return _repositoryRequests.GetResponse(objectsReques, parameters);
+           return await _repositoryRequests.GetResponse(objectsReques, parameters);
 
         }
     }

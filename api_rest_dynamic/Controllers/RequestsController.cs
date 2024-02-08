@@ -26,7 +26,7 @@ namespace api_rest_dynamic.Controllers
         {
             try
             {
-                return Ok(_serviceRequests.GetResponse(nameProcedure, parameters));       
+                return Ok(await _serviceRequests.GetResponse(nameProcedure, parameters));       
             }
             catch (NotFoundException ex)
             {
